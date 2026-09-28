@@ -20,9 +20,10 @@ export async function updateSession(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
   const authRoute = request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/registro";
+  const adminAccessRoute = request.nextUrl.pathname === "/admin/acceso";
   const privateRoute = request.nextUrl.pathname.startsWith("/salas")
     || request.nextUrl.pathname.startsWith("/reservas")
-    || request.nextUrl.pathname.startsWith("/admin");
+    || (request.nextUrl.pathname.startsWith("/admin") && !adminAccessRoute);
 
   if (!user && privateRoute) {
     const url = request.nextUrl.clone();

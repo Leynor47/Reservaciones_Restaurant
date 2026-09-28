@@ -31,7 +31,7 @@ npm run db:seed
 npm run test:concurrency
 ```
 
-Rutas disponibles: `/salas`, `/reservas`, `/admin`, `/login` y `/registro`. La reserva se completa en un modal dentro de `/salas`.
+Rutas disponibles: `/salas`, `/reservas`, `/admin`, `/admin/acceso`, `/login` y `/registro`. La reserva se completa en un modal dentro de `/salas`.
 
 > Antes de ejecutar la aplicación hay que crear o vincular un proyecto de Supabase, aplicar las migraciones y completar `.env.local`.
 
@@ -101,7 +101,7 @@ Un administrador podrá hacer todo lo anterior y además:
 - Las rutas privadas no deben abrirse sin sesión, ni siquiera mediante URL directa.
 - Cada usuario tendrá el rol `miembro` o `admin`.
 - Todo usuario nuevo nace como `miembro`.
-- El rol `admin` se asigna manualmente en la base de datos; no se elige durante el registro.
+- El rol `admin` no se elige durante el registro. Se obtiene desde `/admin/acceso` únicamente después de autenticar la cuenta y validar la clave administrativa en PostgreSQL.
 - El rol y los permisos siempre se verifican en el servidor o en la base de datos, nunca a partir de un estado controlado por el cliente.
 
 ## 3. Reglas de negocio obligatorias

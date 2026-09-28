@@ -6,7 +6,7 @@ La fuente de verdad está en PostgreSQL. La interfaz mejora la experiencia, pero
 
 - Supabase Auth administra correo, contraseña y sesión.
 - El trigger `handle_new_user` crea el perfil con el mismo UUID de `auth.users`.
-- Todo usuario nuevo recibe el rol `miembro`; `admin` solo se asigna desde la base de datos.
+- Todo usuario nuevo recibe el rol `miembro`. El acceso administrativo exige primero autenticar la cuenta y luego validar una clave compartida mediante `claim_admin` en PostgreSQL.
 - Las funciones de reserva obtienen la identidad con `auth.uid()` y nunca aceptan un `user_id` enviado por el cliente.
 
 ## RLS y privilegios
@@ -57,8 +57,11 @@ RLS está habilitado en todas las tablas públicas.
 - `cancel_my_reservation`: exige propiedad y un mínimo de dos horas antes del inicio.
 - `cancel_reservation_as_admin`: exige rol real de administrador y motivo.
 - `get_room_blocks`: limpia estados vencidos y devuelve disponibilidad sanitizada.
+- `claim_admin`: compara únicamente el hash SHA-256 de la clave, registra intentos en una tabla privada con RLS y bloquea la cuenta durante 15 minutos después de cinco fallos. Solo entonces cambia el rol del usuario autenticado.
 
 Todas son `security definer`, fijan `search_path = ''`, validan `auth.uid()` y solo conceden ejecución a `authenticated`.
+
+La clave administrativa no se incluye en el código cliente ni se compara en el navegador. La tabla `private.admin_access_attempts` no está expuesta por la API, tiene RLS activo y carece de permisos para `anon` y `authenticated`.
 
 ## Integridad y concurrencia
 

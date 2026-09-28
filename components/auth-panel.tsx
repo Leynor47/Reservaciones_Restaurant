@@ -31,6 +31,7 @@ export function AuthPanel({ mode, error }: { mode: "login" | "register"; error?:
             <Button className="w-full" size="lg">{isRegister ? "Crear cuenta" : "Ingresar"}<ArrowRight className="size-4" /></Button>
           </form>
           <p className="mt-7 text-center text-sm text-muted-foreground">{isRegister ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"} <Link className="font-bold text-primary" href={isRegister ? "/login" : "/registro"}>{isRegister ? "Inicia sesión" : "Regístrate"}</Link></p>
+          {!isRegister && <Link className="mt-4 flex h-11 items-center justify-center rounded-xl border font-bold text-primary transition-colors hover:bg-muted" href="/admin/acceso">Ingresar como admin</Link>}
         </div>
       </section>
     </main>

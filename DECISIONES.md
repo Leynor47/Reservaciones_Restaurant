@@ -97,3 +97,15 @@ Decisión: se crean ocho salas: Sala 1–3 con capacidad 4, Sala 4–6 con capac
 Por qué: corresponde a la distribución real indicada para el proyecto y mantiene los datos simples.
 
 Qué se sacrifica con esta decisión: los nombres no describen ubicación o equipamiento; podrán editarse desde administración.
+
+## DT-04 - Acceso administrativo desde la aplicación
+
+Fecha/hora: 2026-09-28, America/Costa_Rica.
+
+Opciones consideradas: asignación manual en Supabase; botón público con clave en el cliente; formulario público con validación segura en PostgreSQL.
+
+Decisión: `/admin/acceso` solicita las credenciales normales de la cuenta y una clave administrativa compartida. PostgreSQL compara únicamente su hash, limita los intentos y asigna el rol a la identidad obtenida mediante `auth.uid()`.
+
+Por qué: permite administrar el acceso desde la app sin exponer la clave en el navegador ni confiar en un rol enviado por el cliente.
+
+Qué se sacrifica con esta decisión: una clave compartida sigue siendo menos segura y menos auditable que invitaciones individuales; deberá rotarse si se divulga.
